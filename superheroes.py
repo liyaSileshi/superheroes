@@ -76,28 +76,47 @@ class Hero:
         total = 0
         for armor in self.armors:
             total += armor.block()
-            print("total " + str(total))
-        return total - damage_amt
+            #print("total " + str(total))
+        #damage_amt = total - damage_amt
+        return total
 
     def take_damage(self, damage):
         '''Updates self.current_health to reflect the damage minus the defense.
         '''
         # TODO: Create a method that updates self.current_health to the current
         # minus the the amount returned from calling self.defend(damage).
-  
+        remains = damage - self.defend(damage)
+        self.current_health = self.current_health - remains
 
-
+    def is_alive(self):
+        '''Return True or False depending on whether the hero is alive or not.
+        '''
+        # TODO: Check whether the hero is alive and return true or false
+        if self.current_health <= 0:
+            return False
+        else:
+            return True
 
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block of code is executed.
-    ability = Ability("Great Debugging", 50)
-    another_ability = Ability("Smarty Pants", 90)
-    armor = Armor("Strong",100 )
+    # ability = Ability("Great Debugging", 50)
+    # another_ability = Ability("Smarty Pants", 90)
+    # armor = Armor("Strong",100 )
+    # hero = Hero("Grace Hopper", 200)
+    # hero.add_ability(ability)
+    # hero.add_ability(another_ability)
+    # hero.add_armor(armor)
+    # #print(hero.attack())
+    # #print("block "+ str(armor.block()))
+    # print("defend " + str(hero.defend(30)))
+    # hero = Hero("Grace Hopper", 200)
+    # shield = Armor("Shield", 50)
+    # hero.add_armor(shield)
+    # hero.take_damage(50)
+    # print(hero.current_health)
     hero = Hero("Grace Hopper", 200)
-    hero.add_ability(ability)
-    hero.add_ability(another_ability)
-    hero.add_armor(armor)
-    #print(hero.attack())
-    #print("block "+ str(armor.block()))
-    print("defend " + str(hero.defend(30)))
+    hero.take_damage(150)
+    print(hero.is_alive())
+    hero.take_damage(15000)
+    print(hero.is_alive())
