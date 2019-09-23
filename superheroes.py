@@ -92,31 +92,36 @@ class Hero:
         '''Return True or False depending on whether the hero is alive or not.
         '''
         # TODO: Check whether the hero is alive and return true or false
-        if self.current_health <= 0:
-            return False
-        else:
-            return True
+        return  self.current_health > 0
+
 
     def fight(self, opponent):
         ''' Current Hero will take turns fighting the opponent hero passed in.
         '''
   # TODO: Fight each hero until a victor emerges.
   # Print the victor's name to the screen.
-        while self.is_alive() == True and opponent.is_alive() == True:
+        while self.is_alive() and opponent.is_alive():
             # if ability lists are empty https://stackoverflow.com/questions/53513/how-do-i-check-if-a-list-is-empty
-            if not self.abilities and opponent.abilities:
+            if not self.abilities and not opponent.abilities:
                 print("Draw")
+                return
             a1 = self.attack()
             a2 = opponent.attack()
-            d1 = self.defend(a2)
-            d2 = opponent.defend(a1)
+            #d1 = self.defend(a2)
+            #d2 = opponent.defend(a1)
             self.take_damage(a2)
+            if not self.is_alive():
+                print(opponent.name +" won")
+                return
             opponent.take_damage(a1)
-            if self.is_alive() == True and opponent.is_alive() == False:
-                print(self.name + " won")
-            #elif self.is_alive() == False and opponent.is:
-            else:
-                print(opponent.name + " won")
+            if not opponent.is_alive():
+                print(self.name +" won")
+                return
+            # if self.is_alive() == True and opponent.is_alive() == False:
+            #     print(self.name + " won")
+            # #elif self.is_alive() == False and opponent.is:
+            # else:
+            #     print(opponent.name + " won")
 
 
 
@@ -143,14 +148,14 @@ if __name__ == "__main__":
     # print(hero.is_alive())
     # hero.take_damage(15000)
     # print(hero.is_alive())
-    hero1 = Hero("Wonder Woman")
-    hero2 = Hero("Dumbledore")
+    hero2 = Hero("Wonder Woman")
+    hero1 = Hero("Dumbledore")
     ability1 = Ability("Super Speed", 300)
     ability2 = Ability("Super Eyes", 130)
     ability3 = Ability("Wizard Wand", 80)
     ability4 = Ability("Wizard Beard", 20)
-    hero1.add_ability(ability1)
-    hero1.add_ability(ability2)
-    hero2.add_ability(ability3)
-    hero2.add_ability(ability4)
+    # hero1.add_ability(ability1)
+    # hero1.add_ability(ability2)
+    # hero2.add_ability(ability3)
+    # hero2.add_ability(ability4)
     hero2.fight(hero1)
