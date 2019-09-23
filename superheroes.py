@@ -97,6 +97,29 @@ class Hero:
         else:
             return True
 
+    def fight(self, opponent):
+        ''' Current Hero will take turns fighting the opponent hero passed in.
+        '''
+  # TODO: Fight each hero until a victor emerges.
+  # Print the victor's name to the screen.
+        while self.is_alive() == True and opponent.is_alive() == True:
+            # if ability lists are empty https://stackoverflow.com/questions/53513/how-do-i-check-if-a-list-is-empty
+            if not self.abilities and opponent.abilities:
+                print("Draw")
+            a1 = self.attack()
+            a2 = opponent.attack()
+            d1 = self.defend(a2)
+            d2 = opponent.defend(a1)
+            self.take_damage(a2)
+            opponent.take_damage(a1)
+            if self.is_alive() == True and opponent.is_alive() == False:
+                print(self.name + " won")
+            #elif self.is_alive() == False and opponent.is:
+            else:
+                print(opponent.name + " won")
+
+
+
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block of code is executed.
@@ -115,8 +138,19 @@ if __name__ == "__main__":
     # hero.add_armor(shield)
     # hero.take_damage(50)
     # print(hero.current_health)
-    hero = Hero("Grace Hopper", 200)
-    hero.take_damage(150)
-    print(hero.is_alive())
-    hero.take_damage(15000)
-    print(hero.is_alive())
+    # hero = Hero("Grace Hopper", 200)
+    # hero.take_damage(150)
+    # print(hero.is_alive())
+    # hero.take_damage(15000)
+    # print(hero.is_alive())
+    hero1 = Hero("Wonder Woman")
+    hero2 = Hero("Dumbledore")
+    ability1 = Ability("Super Speed", 300)
+    ability2 = Ability("Super Eyes", 130)
+    ability3 = Ability("Wizard Wand", 80)
+    ability4 = Ability("Wizard Beard", 20)
+    hero1.add_ability(ability1)
+    hero1.add_ability(ability2)
+    hero2.add_ability(ability3)
+    hero2.add_ability(ability4)
+    hero2.fight(hero1)
