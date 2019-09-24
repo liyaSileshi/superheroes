@@ -105,24 +105,62 @@ class Hero:
             if not self.abilities and not opponent.abilities:
                 print("Draw")
                 return
+
             a1 = self.attack()
             a2 = opponent.attack()
             #d1 = self.defend(a2)
             #d2 = opponent.defend(a1)
-            self.take_damage(a2)
-            if not self.is_alive():
-                print(opponent.name +" won")
-                return
+
+                # break
             opponent.take_damage(a1)
             if not opponent.is_alive():
                 print(self.name +" won")
                 return
+            self.take_damage(a2)
+            if not self.is_alive():
+                print(opponent.name +" won")
+                return
+                # break
             # if self.is_alive() == True and opponent.is_alive() == False:
             #     print(self.name + " won")
             # #elif self.is_alive() == False and opponent.is:
             # else:
             #     print(opponent.name + " won")
 
+class Weapon(Ability):
+    def attack(self):
+        """  This method returns a random value
+        between one half to the full attack power of the weapon.
+        """
+        # TODO: Use what you learned to complete this method.
+        return random.randint(self.max_damage//2, self.max_damage)
+
+class Team:
+    def __init__(self, name):
+        ''' Initialize your team with its team name
+        '''
+        self.name = name
+        self.heroes = []
+
+    def remove_hero(self, name):
+        '''Remove hero from heroes list.
+        If Hero isn't found return 0.
+        '''
+        for name in self.heroes:
+            self.heroes.remove(name)
+        else:
+            return 0
+
+    def view_all_heroes(self):
+        '''Prints out all heroes to the console.'''
+        for hero in self.heroes:
+            print(hero.name)
+
+    def add_hero(self, hero):
+        '''Add Hero object to self.heroes.'''
+        # TODO: Add the Hero object that is passed in to the list of heroes in
+        # self.heroes
+        self.heroes.append(hero)
 
 
 if __name__ == "__main__":
@@ -148,14 +186,14 @@ if __name__ == "__main__":
     # print(hero.is_alive())
     # hero.take_damage(15000)
     # print(hero.is_alive())
-    hero2 = Hero("Wonder Woman")
-    hero1 = Hero("Dumbledore")
+    hero1 = Hero("Wonder Woman")
+    hero2 = Hero("Dumbledore")
     ability1 = Ability("Super Speed", 300)
     ability2 = Ability("Super Eyes", 130)
     ability3 = Ability("Wizard Wand", 80)
     ability4 = Ability("Wizard Beard", 20)
-    # hero1.add_ability(ability1)
-    # hero1.add_ability(ability2)
-    # hero2.add_ability(ability3)
-    # hero2.add_ability(ability4)
+    hero1.add_ability(ability1)
+    hero1.add_ability(ability2)
+    hero2.add_ability(ability3)
+    hero2.add_ability(ability4)
     hero2.fight(hero1)
