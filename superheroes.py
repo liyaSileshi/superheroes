@@ -41,13 +41,26 @@ class Hero:
       self.name = name
       self.starting_health = starting_health
       self.current_health = starting_health
+      self.deaths = 0
+      self.kills = 0
       self.abilities = []
       self.armors = []
+
 
     def add_ability(self, ability):
       ''' Add ability to abilities list '''
       # TODO: Add ability object to abilities:List
       self.abilities.append(ability)
+
+    def add_kill(self, num_kills):
+        ''' Update kills with num_kills'''
+    # TODO: This method should add the number of kills to self.kills
+        self.kills += num_kills
+
+    def add_deaths(self, num_deaths):
+        ''' Update deaths with num_deaths'''
+    # TODO: This method should add the number of deaths to self.deaths
+        self.deaths +=num_deaths
 
     def attack(self):
       '''Calculate the total damage from all ability attacks.
@@ -67,7 +80,8 @@ class Hero:
         # TODO: Add armor object that is passed in to `self.armors`
         self.armors.append(armor)
 
-    def defend(self, damage_amt):
+    #ask for help on this function
+    def defend(self, damage_amt=0):
         '''Runs `block` method on each armor.
             Returns sum of all blocks
         '''
@@ -77,8 +91,8 @@ class Hero:
         for armor in self.armors:
             total += armor.block()
             #print("total " + str(total))
-        #damage_amt = total - damage_amt
-        return total
+        return abs(total - damage_amt)
+        #return total
 
     def take_damage(self, damage):
         '''Updates self.current_health to reflect the damage minus the defense.
@@ -114,10 +128,17 @@ class Hero:
                 # break
             opponent.take_damage(a1)
             if not opponent.is_alive():
+                #num_kills += 1
+                #num_deaths += 1
+                self.add_kill(1)
+                opponent.add_deaths(1)
                 print(self.name +" won")
                 return
+
             self.take_damage(a2)
             if not self.is_alive():
+                opponent.add_kill(1)
+                self.add_deaths(1)
                 print(opponent.name +" won")
                 return
                 # break
@@ -162,6 +183,41 @@ class Team:
         # self.heroes
         self.heroes.append(hero)
 
+    def attack(self, other_team):
+        ''' Battle each team against each other.'''
+        # TODO: Randomly select a living hero from each team and have
+        # them fight until one or both teams have no surviving heroes.
+        # Hint: Use the fight method in the Hero class.
+        for hero1 in self.heroes:
+            if hero1.is_alive():
+                team1 = random.choice(self.heroes)
+            else:
+                return "All self hero dead"
+            #while self.heroes.is_alive() or other_team.heroes.is_alive():
+                # team1 = random.choice(self.heroes)
+        for hero2 in other_team.heroes:
+            if hero2.is_alive():
+                team2 = random.choice(other_team.heroes)
+            else:
+                return "All other team hero dead"
+
+        Hero.fight(team1, team2)
+
+    def revive_heroes(self, health=100):
+        ''' Reset all heroes health to starting_health'''
+        # TODO: This method should reset all heroes health to their
+        # original starting value.
+        for hero in self.heroes:
+            hero.current_health = health
+
+    def stats(self):
+        '''Print team statistics'''
+        # TODO: This method should print the ratio of kills/deaths for each
+        # member of the team to the screen.
+        # This data must be output to the console.
+        # Hint: Use the information stored in each hero.
+        for hero in self.heroes:
+            print(int(hero.kills/hero.deaths))
 
 if __name__ == "__main__":
     # If you run this file from the terminal
