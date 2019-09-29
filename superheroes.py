@@ -73,6 +73,16 @@ class Hero:
           total += ability.attack()
       return total
 
+    def add_weapon(self, weapon):
+        '''Add weapon to self.abilities'''
+        # TODO: This method will append the weapon object passed in as an
+        # argument to self.abilities.
+        # This means that self.abilities will be a list of
+        # abilities and weapons.
+        self.abilities.append(weapon)
+
+
+
     def add_armor(self, armor):
         '''Add armor to self.armors
         Armor: Armor Object
@@ -156,6 +166,7 @@ class Weapon(Ability):
         # TODO: Use what you learned to complete this method.
         return random.randint(self.max_damage//2, self.max_damage)
 
+
 class Team:
     def __init__(self, name):
         ''' Initialize your team with its team name
@@ -188,18 +199,26 @@ class Team:
         # TODO: Randomly select a living hero from each team and have
         # them fight until one or both teams have no surviving heroes.
         # Hint: Use the fight method in the Hero class.
+        self_alive = []
+        other_alive = []
+
         for hero1 in self.heroes:
             if hero1.is_alive():
-                team1 = random.choice(self.heroes)
+                self_alive.append(hero1)
             else:
                 return "All self hero dead"
+
+        team1 = random.choice(self_alive)
+
             #while self.heroes.is_alive() or other_team.heroes.is_alive():
                 # team1 = random.choice(self.heroes)
         for hero2 in other_team.heroes:
             if hero2.is_alive():
-                team2 = random.choice(other_team.heroes)
+                other_alive.append(hero2)
             else:
                 return "All other team hero dead"
+
+        team2 = random.choice(other_team.heroes)
 
         Hero.fight(team1, team2)
 
@@ -218,6 +237,158 @@ class Team:
         # Hint: Use the information stored in each hero.
         for hero in self.heroes:
             print(int(hero.kills/hero.deaths))
+
+class Arena:
+    def __init__(self):
+        '''Instantiate properties
+            team_one: None
+            team_two: None
+        '''
+        # TODO: create instance variables named team_one and team_two that
+        # will hold our teams.
+        self.team_one = None
+        self.team_two = None
+
+    def create_ability(self):
+        '''Prompt for Ability information.
+            return Ability with values from user Input
+        '''
+        # TODO: This method will allow a user to create an ability.
+        # Prompt the user for the necessary information to create a new ability object.
+        # return the new ability object.
+        name = input("Add an ability name for the hero: ")
+        attack_strength = int(input("Add the maximum attack strength for the hero: "))
+        ability = Ability(name, attack_strength)
+        return ability
+
+    def create_weapon(self):
+        '''Prompt user for Weapon information
+            return Weapon with values from user input.
+        '''
+        # TODO: This method will allow a user to create a weapon.
+        # Prompt the user for the necessary information to create a new weapon object.
+        # return the new weapon object.
+        name = input("Add a weapon name for the hero: ")
+        attack_strength = int(input("Add the maximum attack strength for the hero: "))
+        weapon = Weapon(name, attack_strength)
+        return weapon
+
+    def create_armor(self):
+        '''Prompt user for Armor information
+          return Armor with values from user input.
+        '''
+        # TODO:This method will allow a user to create a piece of armor.
+        #  Prompt the user for the necessary information to create a new armor
+        #  object.
+        #
+        #  return the new armor object with values set by user.
+        name = input("Add an armor for the hero: ")
+        max_block = int(input("Add the maximum block for the hero: "))
+        armor = Armor(name, max_block)
+        return armor
+
+    def create_hero(self):
+        '''Prompt user for Hero information
+          return Hero with values from user input.
+        '''
+        # TODO: This method should allow a user to create a hero.
+        # User should be able to specify if they want armors, weapons, and
+        # abilities.
+        # Call the methods you made above and use the return values to build
+        # your hero.
+        #
+        # return the new hero object
+        name = input("Enter a hero name: ")
+        health = input("Enter starting health: ")
+        hero = Hero(name, health)
+
+        choice_armor = input('Would you like to add armors for your hero, Y/N?: ').lower()
+        if choice_armor == 'y':
+            num = int(input('how many armors? '))
+            for i in range(num):
+                hero.add_armor(self.create_armor())
+
+        choice_ability = input('Would you like to add abilities for your hero, Y/N?: ').lower()
+        if choice_ability == 'y':
+            num = int(input('how many abilities?: '))
+            for i in range(num):
+                hero.add_ability(self.create_ability())
+
+        choice_weapon = input('Would you like to add weapons for your hero, Y/N?: ').lower()
+        if choice_weapon == 'y':
+            num = int(input('how many weapons?: '))
+            for i in range(num):
+                hero.add_weapon(self.create_weapon())
+
+        return hero
+
+    def build_team_one(self):
+        '''Prompt the user to build team_one '''
+        # TODO: This method should allow a user to create team one.
+        # Prompt the user for the number of Heroes on team one
+        # call self.create_hero() for every hero that the user wants to add to team one.
+        #
+        # Add the created hero to team one.
+        name = input('enter name for team 1: ')
+        team1 = Team(name)
+        num_team1 = int(input('how many heroes do you want on your team 1?: '))
+        for i in range(num_team1):
+            hero1 = self.create_hero()
+            team1.add_hero(hero1)
+        self.team_one = team1
+
+    def build_team_two(self):
+        """Prompt the user to build team_two"""
+        # TODO: This method should allow a user to create team two.
+        # Prompt the user for the number of Heroes on team two
+        # call self.create_hero() for every hero that the user wants to add to team two.
+        #
+        # Add the created hero to team two.
+        name = input('enter name for team 2: ')
+        team2 = Team(name)
+        num_team2 = int(input('how many heroes do you want on your team 2?: '))
+        for i in range(num_team2):
+            hero2 = self.create_hero()
+            team2.add_hero(hero2)
+        self.team_two = team2
+
+    def team_battle(self):
+        '''Battle team_one and team_two together.'''
+        # TODO: This method should battle the teams together.
+        # Call the attack method that exists in your team objects
+        # for that battle functionality.
+
+        self.team_one.attack(self.team_two)
+
+    def show_stats(self):
+        '''Prints team statistics to terminal.'''
+        # TODO: This method should print out battle statistics
+        # including each team's average kill/death ratio.
+        # Required Stats:
+        #     Declare winning team
+        #     Show both teams average kill/death ratio.
+        #     Show surviving heroes.
+
+        for hero in team_one:
+            if hero.is_alive():
+                print(f"{self.team_one.name} wins!")
+            else:
+                print(f"{self.team_two.name} wins!")
+
+        self.team_one.stats()
+        self.team_two.stats()
+        for hero in team_one:
+            if hero.is_alive():
+                print(hero)
+            else:
+                print("all team 1 dead")
+        for hero in team_two:
+            if hero.is_alive():
+                print(hero)
+            else:
+                print("all team 2 dead")
+
+        #print('surviving heroes')
 
 if __name__ == "__main__":
     # If you run this file from the terminal
@@ -242,14 +413,20 @@ if __name__ == "__main__":
     # print(hero.is_alive())
     # hero.take_damage(15000)
     # print(hero.is_alive())
-    hero1 = Hero("Wonder Woman")
-    hero2 = Hero("Dumbledore")
-    ability1 = Ability("Super Speed", 300)
-    ability2 = Ability("Super Eyes", 130)
-    ability3 = Ability("Wizard Wand", 80)
-    ability4 = Ability("Wizard Beard", 20)
-    hero1.add_ability(ability1)
-    hero1.add_ability(ability2)
-    hero2.add_ability(ability3)
-    hero2.add_ability(ability4)
-    hero2.fight(hero1)
+    # hero1 = Hero("Wonder Woman")
+    # hero2 = Hero("Dumbledore")
+    # ability1 = Ability("Super Speed", 300)
+    # ability2 = Ability("Super Eyes", 130)
+    # ability3 = Ability("Wizard Wand", 80)
+    # ability4 = Ability("Wizard Beard", 20)
+    # hero1.add_ability(ability1)
+    # hero1.add_ability(ability2)
+    # hero2.add_ability(ability3)
+    # hero2.add_ability(ability4)
+    # hero2.fight(hero1)
+    arena = Arena()
+    arena.build_team_one()
+    arena.build_team_two()
+    print(arena.team_one.heroes[0])
+    arena.team_battle()
+    arena.show_stats()
