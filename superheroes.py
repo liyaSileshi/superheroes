@@ -117,32 +117,32 @@ class Hero:
         ''' Current Hero will take turns fighting the opponent hero passed in.
         '''
         # Fight each hero until a victor emerges.
-        # Print the victor's name to the screen.
-        while self.is_alive() and opponent.is_alive():
-            # if ability lists are empty https://stackoverflow.com/questions/53513/how-do-i-check-if-a-list-is-empty
-            if not self.abilities and not opponent.abilities:
-                print("Draw")
-                break
+        # Print the victor's name to the screen
+        if not self.abilities and not opponent.abilities:
+            print("Draw")
+        else:
 
-            attack1 = self.attack()
-            attack2 = opponent.attack()
+            while self.is_alive() and opponent.is_alive():
+                # if ability lists are empty https://stackoverflow.com/questions/53513/how-do-i-check-if-a-list-is-empty
+                attack1 = self.attack()
+                attack2 = opponent.attack()
 
-            opponent.take_damage(attack1)
+                opponent.take_damage(attack1)
 
-            if not opponent.is_alive():
-                self.add_kill(1)
-                opponent.add_deaths(1)
-                print(self.name +" won")
-                print(opponent.name + " is dead")
+                if not opponent.is_alive():
+                    self.add_kill(1)
+                    opponent.add_deaths(1)
+                    print(self.name +" won")
+                    print(opponent.name + " is dead")
 
 
-            self.take_damage(attack2)
+                self.take_damage(attack2)
 
-            if not self.is_alive():
-                opponent.add_kill(1)
-                self.add_deaths(1)
-                print(opponent.name +" won")
-                print(self.name + " is dead")
+                if not self.is_alive():
+                    opponent.add_kill(1)
+                    self.add_deaths(1)
+                    print(opponent.name +" won")
+                    print(self.name + " is dead")
 
 
 class Weapon(Ability):
@@ -194,7 +194,12 @@ class Team:
         while len(self.get_alive()) > 0 and len(other_team.get_alive()) > 0:
             rand_hero1 = random.choice(self.get_alive())
             rand_hero2 = random.choice(other_team.get_alive())
-            rand_hero1.fight(rand_hero2)
+            if not rand_hero1.abilities and not rand_hero2.abilities:
+            #if not self.abilities and not opponent.abilities:
+                print("Draw")
+                return
+            else:
+                rand_hero1.fight(rand_hero2)
 
     def revive_heroes(self, health=100):
         ''' Reset all heroes health to starting_health'''
@@ -339,18 +344,20 @@ class Arena:
         #     Show both teams average kill/death ratio.
         #     Show surviving heroes.
 
-        if len(self.team_one.get_alive()) > 0:
+        if len(self.team_one.get_alive()) > 0 and len(self.team_two.get_alive()) == 0:
             print(f"team {self.team_one.name} wins!")
             print(f"Alive {self.team_one.name} heroes: ")
             for hero in self.team_one.get_alive():
                 print(hero.name)
 
-        else:
+        elif len(self.team_two.get_alive()) > 0 and len(self.team_one.get_alive()) == 0:
             print(f"team {self.team_two.name} wins!")
             print(f"Alive {self.team_two.name} heroes: ")
             for hero in self.team_two.get_alive():
                 print(hero.name)
 
+        else:
+            print("It's a draw")
 
         print(f"{self.team_one.name} stats: ")
         self.team_one.stats()
@@ -362,7 +369,7 @@ class Arena:
 
 if __name__ == "__main__":
 
-    
+
     game_is_running = True
 
     # Instantiate Game Arena
